@@ -12,7 +12,7 @@
   }
   canvas {
     background-color: #f3f4f6; /* Tailwind light gray */
-    border: 2px dashed #ccc;
+    border: 2px solid #ccc;
     cursor: crosshair;
   }
   .button {
@@ -73,9 +73,10 @@
     <div class="w-full lg:w-1/2 px-2 mb-4">
       <div class="border p-4 quiz-section">
         <h2 class="text-xl font-semibold mb-4">AI Quiz</h2>
-        <p id="question">What is your question?</p>
+        <div id="question">What is your question?</div>
         <input type="text" id="answer" class="border rounded p-2 w-full" placeholder="Type your answer here">
-        <button class="button mt-4" onclick="checkAnswer()">Submit Answer</button>
+        <button class="button mt-4" onclick="submitAnswer()">Submit Answer</button>
+        <div id="feedback"></div>
       </div>
     </div>
   </div>
@@ -87,19 +88,18 @@
   let brushColor = '#000000'; // Default color
   let brushSize = 5; // Default size
 
-  const brushSizeSlider = document.getElementById('brushSize');
-  brushSizeSlider.addEventListener('input', () => {
-    brushSize = brushSizeSlider.value;
-  });
-
-  canvas.addEventListener('mousedown', (e) => {
+  function startPosition(e) {
     painting = true;
     draw(e);
-  });
+  }
 
-  canvas.addEventListener('mouseup', () => {
+  function finishedPosition() {
     painting = false;
     ctx.beginPath();
-  });
+  }
 
-  canvas.addEventListener('mousemove', draw);
+  function draw(e) {
+    if (!painting) return;
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = 'round';
+
